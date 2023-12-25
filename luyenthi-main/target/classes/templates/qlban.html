@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+  <div th:replace="navAd.html"></div>
+
+  <div class="row col-lg-9 border" style="margin-left: 150px;">
+    <h2 class="text-center col-sm-12 mt-2 mb-5 border bg-info text-white">Quản lý ban</h2>
+    <form method="post" th:object="${item}"  class="col-sm-6 container-fluid">
+      <div class="form-group">
+        <label for="id">ID ban:</label>
+        <input type="text" id="idBan" name="idBan" th:value="${item.idBan}" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="name">Tên ban:</label>
+        <input type="text" id="tenBan" name="tenBan" th:value="${item.tenBan}" class="form-control" required>
+      </div>
+      <button type="submit" class="btn btn-primary" th:formaction="@{/qlban/createBan}">Thêm</button>
+      <button type="submit" class="btn btn-primary" th:href="@{'/qlban/lammoi}">Làm mới</button>
+      <button type="submit" class="btn btn-primary" th:formaction="@{/qlban/update}">Sửa</button>
+      <a type="submit" class="btn btn-primary" href="/indexAd">Thoát</a>
+    </form>
+    <table class="table-bordered text-center table-hover col-sm-6 mb-5">
+
+      <tr class="bg-secondary text-white">
+        <th>ID ban</th>
+        <th>Tên ban</th>
+        <th>Xem chi tiết</th>
+        <th>Xóa</th>
+      </tr>
+
+
+      <tbody>
+        <th:block th:each="item: ${items}">
+          <tr>
+            <td>[[${item.idBan}]]</td>
+            <td>[[${item.tenBan}]]</td>
+            <td><a class="btn btn-primary btn-sm" th:href="@{'/qlban/edit/'+ ${item.idBan}}">Xem chi tiết</a></td>
+            <td><a class="btn btn-danger btn-sm" th:href="@{'/qlban/delete/'+${item.idBan}}">Xóa</a></td>
+          </tr>
+          <!-- th:href="@{'/admin/manage/editproduct/'+ ${item.productId}}" -->
+        </th:block>
+
+      </tbody>
+
+    </table>
+  </div>
+</body>
+
+</html>

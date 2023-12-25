@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Liên kết Bootstrap từ CDN -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <title>Biểu mẫu quản lý điểm</title>
+</head>
+
+<body>
+  <div th:replace="navAd.html"></div>
+
+  <div class="container">
+    <!-- Tạo bảng với Bootstrap -->
+    <h2 class="text-center col-sm-12 mt-2 mb-5 border bg-info text-white">Quản Lý Điểm</h2>
+
+    <table class="table table-bordered table-striped table-hover">
+      <!-- Tiêu đề bảng -->
+      <!-- Hàng đầu tiên có hai hộp chọn -->
+      <tr>
+        <!-- Hộp chọn cho môn thi -->
+        <td colspan="3">
+          <label for="subject">Môn thi:</label>
+          <select class="form-control" id="subject" th:field="${selectedSubject}">
+            <!-- Thymeleaf iteration để hiển thị danh sách môn học -->
+            <option th:each="subject : ${subjectList}" th:value="${subject.id}" th:text="${subject.tenMonHoc}"></option>
+          </select>
+        </td>
+        <!-- Hộp chọn cho mã đề -->
+        <td colspan="4">
+          <label for="code">Mã Đề:</label>
+          <select class="form-control" id="de" th:field="${selectedDe}">
+            <!-- Thymeleaf iteration để hiển thị danh sách môn học -->
+            <option th:each="de : ${deList}" th:value="${de.idBoDe}" th:text="${de.tenDe}">
+            </option>
+            </option>
+          </select>
+        </td>
+      </tr>
+      <!-- Hàng thứ hai có các tiêu đề cột -->
+      <tr>
+        <!-- Tiêu đề cột STT -->
+        <th>STT</th>
+        <!-- Tiêu đề cột Họ và tên -->
+        <th>Họ và tên</th>
+        <!-- Tiêu đề cột Môn học -->
+
+        <th>Mã đề</th>
+        <!-- Tiêu đề cột Điểm thi -->
+        <th>Điểm thi</th>
+        <!-- Tiêu đề cột Xem chi tiết -->
+        <th>Xem chi tiết</th>
+      </tr>
+      <!-- Hàng thứ ba có dữ liệu của sinh viên thứ nhất -->
+
+
+      <th:block th:each="tk: ${tk}">
+        <tr>
+          <td>[[${tk.id}]]</td>
+          <td th:text="${tk.nguoiDung != null ? tk.nguoiDung.getHoTen() : ''}"></td>
+          <td>[[${tk.tenDe}]]</td>
+          <td>[[${tk.diem}]]</td>
+          <td th:if="${tk.imageData == null}">
+
+          </td>
+          <td th:unless="${tk.imageData == null}">
+            <a class="btn btn-danger btn-sm" th:href="@{'/api/screenshots/' + ${tk.id}}" target="_blank">Xem chi
+              tiết</a>
+          </td>
+        </tr>
+        <!-- th:href="@{'/admin/manage/editproduct/'+ ${item.productId}}" -->
+      </th:block>
+      <!-- Hàng thứ tư có dữ liệu của sinh viên thứ hai -->
+
+    </table>
+  </div>
+
+  <!-- Liên kết Bootstrap JS từ CDN -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>

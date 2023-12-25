@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xác Nhận Xóa Người Dùng</title>
+</head>
+<body>
+    <h2>Xác Nhận Xóa Người Dùng</h2>
+    <p>Bạn có chắc chắn muốn xóa người dùng sau đây?</p>
+    <p>ID: <span th:text="${user.idND}"></span></p>
+    <p>Họ và Tên: <span th:text="${user.hoTen}"></span></p>
+    <p>Email: <span th:text="${user.email}"></span></p>
+    <form action="/qluser/delete/confirm" method="post">
+       
+        <input type="hidden" th:name="idND" th:value="${user.idND}" />
+        <button type="submit">Xác Nhận Xóa</button>
+    </form>
+    <a href="/qluser">Hủy</a>
+</body>
+</html>

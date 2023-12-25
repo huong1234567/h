@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Liên kết Bootstrap từ CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Biểu mẫu quản lý môn thi</title>
+</head>
+
+<body>
+    <div th:replace="navAd.html"></div>
+
+    <div class="container">
+        <!-- Tạo biểu mẫu ngang -->
+        <form class="container-fluid border" th:object="${item}" th:action="@{/qldethi}" method="post">
+            <div class="row">
+                <!-- Tiêu đề biểu mẫu -->
+                <h2 class="text-center col-sm-12 mt-2 mb-5 border bg-info text-white">Quản Lý Đề Thi</h2>
+                <!-- Nhóm các trường nhập liệu và nhãn -->
+                </hr>
+
+                <div class="col-sm-6">
+                    <div class="form-group row">
+                        <label for="subject" class="col-sm-2 col-form-label">Id Bộ Đề</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control " id="idBoDe" placeholder="Id bộ đề " name="idBoDe"
+                                th:value="${item.idBoDe}" disabled>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="subject" class="col-sm-2 col-form-label">Môn học</label>
+                        <div class="col-sm-10">
+                            <td colspan="3">
+
+                                <select class="form-control" id="subject" name="subject" th:field="${item.monHoc.id}">
+                                    <!-- Thymeleaf iteration để hiển thị danh sách môn học -->
+                                    <option th:each="subject : ${subjectList}" th:value="${subject.id}"
+                                        th:text="${subject.tenMonHoc}" th:selected="${item.monHoc.id == subject.id}">
+                                    </option>
+                                </select>
+                                <!-- <input type="hidden" class="form-control " id="Ban.idBan" name="Ban.idBan"  th:value="${item.Ban.idBan}" placeholder="Nhập id môn thi"> -->
+                            </td>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <!-- Nhãn cho trường Môn thi -->
+                        <label for="subject" class="col-sm-2 col-form-label">Tên đề: </label>
+                        <!-- Trường nhập liệu cho Môn thi -->
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control " id="tenDe" placeholder="Nhập môn thi" name="tenDe"
+                                th:value="${item.tenDe}">
+                        </div>
+                    </div>
+                    <!-- <div class="form-group row"> -->
+                    <!-- Nhãn cho trường Thời gian -->
+                    <!-- <label for="time" class="col-sm-2 col-form-label">Thời gian:</label> -->
+                    <!-- Trường nhập liệu cho Thời gian -->
+                    <!-- <div class="col-sm-10">
+                            <input type="text" class="form-control " id="time" placeholder="Nhập thời gian (phút)">
+                        </div>
+                    </div> -->
+                    <!-- <div class="form-group row">
+                        <label class="col-sm-2 ">File môn học:</label>
+                        <div class="col-sm-10">
+                            <input type="file" id="file" name="filemon">
+                        </div>
+                    </div> -->
+                    <!-- Nhóm các nút chức năng -->
+                    <div class="form-group row">
+                        <!-- Nút thêm -->
+                        <div class="col-sm-2">
+                            <button type="submit" class="btn btn-primary btn-block"
+                                th:formaction="@{/qldethi/createDethi}">Thêm</button>
+                        </div>
+                        <!-- Nút xóa -->
+                        <div class="col-sm-2">
+                            <button type="submit" class="btn btn-danger btn-block"
+                                th:href="@{'/qldethi/lammoi}">Mới</button>
+                        </div>
+                        <!-- Nút sửa -->
+                        <div class="col-sm-2">
+                            <button type="submit" class="btn btn-success btn-block"
+                                th:formaction="@{/qldethi/update}">Sửa</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <!-- Tạo bảng với Bootstrap -->
+                    <table class="table table-bordered table-striped table-hover">
+                        <!-- Hàng thứ hai có các tiêu đề cột -->
+                        <tr>
+                            <!-- Tiêu đề cột ID môn -->
+                            <th>ID bộ đề</th>
+                            <th>Tên đề</th>
+
+                            <!-- Tiêu đề cột Môn học -->
+                            <th>Môn học</th>
+                            <!-- Tiêu đề cột Thời gian -->
+                            <th>Sửa</th>
+                            <th>Xóa</th>
+
+                        </tr>
+
+                        <!-- Hàng thứ ba có dữ liệu của môn thi thứ nhất -->
+                        <th:block th:each="item: ${items}">
+                            <tr>
+
+                                <td>[[${item.idBoDe}]]</td>
+                                <td>[[${item.tenDe}]]</td>
+
+
+                                <td>[[${item.monHoc.tenMonHoc}]]</td>
+                                <td><a class="btn btn-primary btn-sm"
+                                        th:href="@{'/qldethi/edit/'+ ${item.idBoDe}}">Sửa</a></td>
+                                <td><a class="btn btn-danger btn-sm"
+                                        th:href="@{'/qldethi/delete/'+${item.idBoDe}}">Xóa</a></td>
+                            </tr>
+                            <!-- th:href="@{'/admin/manage/editproduct/'+ ${item.productId}}" -->
+
+                    </table>
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item" th:unless="${items.number == 0}">
+                                <a class="page-link" th:href="@{|/qldethi?p=${items.number-1}|}" tabindex="-1"><<</a>
+                            </li>                                                    
+                         &nbsp;
+                            <li class="page-item" th:unless="${items.number == 7}">
+                                <a class="page-link" th:href="@{|/qldethi?p=${items.number+1}|}" tabindex="-1">>></a>
+                            </li> 
+                        </ul>
+                    </nav>
+                    </th:block>
+                </div>
+        </form>
+    </div>
+    </div>
+
+    <!-- Liên kết Bootstrap JS từ CDN -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

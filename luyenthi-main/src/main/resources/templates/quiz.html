@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+	<script src="https://code.angularjs.org/1.8.2/angular-sanitize.min.js"></script>
+
+	<title>Insert title here</title>
+	<style type="text/css">
+		.bold-text {
+			color: green;
+			font-weight: bold;
+		}
+
+		.red-text {
+			color: red;
+		}
+
+		#link-container img {
+			width: 100%;
+			height: auto;
+		}
+	</style>
+
+	<script>
+		function loadScript(src, callback) {
+			var scriptElement = document.createElement('script');
+			scriptElement.src = src;
+			scriptElement.onload = callback;
+			document.head.appendChild(scriptElement);
+		}
+
+		// Lấy tên môn học được chọn từ localStorage
+		var selectedSubject = localStorage.getItem('selectedSubject');
+
+		// Kiểm tra nếu có môn học được chọn
+		if (selectedSubject) {
+			// Tải tệp JavaScript tương ứng dựa trên môn học được chọn
+			loadScript(selectedSubject + '.js', function () {
+				// Sau khi tệp JavaScript đã tải xong, cập nhật dữ liệu trong AngularJS
+				$scope.$apply(function () {
+					// Cập nhật dữ liệu hoặc thực hiện các hành động khác ở đây
+				});
+			});
+		}
+	</script>
+
+	<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+	<!-- thư viện chụp màng hình trực tuyến -->
+
+</head>
+
+<body ng-app="myapp">
+	<!-- plugin comments -->
+	<div id="fb-root"></div>
+	<script async defer crossorigin="anonymous"
+		src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v18.0&appId=226709867039367"
+		nonce="IRf0F1xg"></script>
+	<div th:replace="header.html"></div>
+
+	<div class="container-fluid mb-5">
+		<div class="row border-top px-xl-5">
+			<!-- Navbar Start -->
+			<div th:replace="nav.html"></div>
+			<div class="col-lg-9">
+				<div th:replace="nav1.html"></div>
+				<!-- Navbar End -->
+
+				<!--ARTICLE ở đây -->
+				<div class="border box">
+					<div class="container mt-3">
+						<div ng-controller="myctrl">
+							<form name="myform" id="quiz-form">
+								<h3 class="text-danger font-weight-bold-small px-3 mr-1 " style="text-align: center">Đề
+									thi THPT quốc gia <span id="ten" th:text="${ten1}"></span>
+								</h3>
+
+								<div id="countdown" style="text-align: center">
+									Thời gian làm bài: <span id="timeLeft" th:text="${timeq}"></span>
+								</div>
+
+
+								<hr>
+
+								<div ng-repeat="sv in users | filter:{made: currentPage}"
+									ng-show="sv.made === currentPage">
+									<div class="text-justify"><b ng-bind-html="sv.para"><br></b></div>
+									<div><b ng-bind-html="sv.note"><br></b></div>
+									<div ng-bind-html="sv.ten">{{sv.ten}}<br></div>
+									<div ng-if="sv.anh">
+										<img src="{{sv.anh}}"><br>
+									</div>
+
+
+									<div ng-repeat="v in sv.Answers">
+										<input type="radio" ng-model="sv.selectedAnswer" ng-value="v.value"
+											name="{{v.name}}">
+										<span
+											ng-class="{ 'bold-text': v.isCorrect,'red-text': sv.isUserAnswer === v.value && sv.isUserAnswer !== sv.kq }"
+											ng-bind-html="v.Text">{{v.Text}}</span>
+										<span ng-if="v.question1">
+											<img src="{{v.question1}}">
+										</span>
+										</br>
+									</div>
+									<br>
+
+									<div ng-if="sv.da" ng-model="sv.nd" ng-show="showExplanation">
+										<img src="{{sv.da}}"><br>
+
+									</div>
+									<div class="border bg-secondary text-success" ng-model="sv.nd"
+										ng-show="showExplanationnd" ng-bind-html="sv.nd">
+										{{sv.nd}}</div>
+								</div>
+								<div class="text-center mt-2 mb-3 text-white ">
+									<input class="btn btn-info" type="button" value="Nộp bài" ng-click="check()"
+										ng-hide="submitButtonVisible" />
+									<a class="btn btn-dark mr-1 " type="button" href="/index"
+										ng-hide="!submitButtonVisible">Thoát</a>
+									<!-- <input class="btn btn-info" type="button" value="Lưu bài làm"
+										ng-click="captureScreenshot()" ng-hide="!submitButtonVisible" /> -->
+									<!-- Button trigger modal -->
+									<button ng-click="captureScreenshot()" ng-hide="!submitButtonVisible" type="button"
+										class="btn btn-info" data-toggle="modal" data-target="#exampleModal">
+										Lưu bài làm
+									</button>
+									<!-- Modal -->
+									<div class="modal fade" id="exampleModal" tabindex="-1"
+										aria-labelledby="exampleModalLabel" aria-hidden="true">
+										<div class="modal-dialog">
+											<div class="modal-content">
+												<div class="modal-body">
+													<h5 class="modal-title" id="exampleModalLabel">Bài làm đã được lưu
+														thành công!</h5>
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-secondary"
+														data-dismiss="modal">Đóng</button>
+												</div>
+											</div>
+										</div>
+									</div>
+
+
+								</div>
+							</form>
+						</div>
+
+					</div>
+					<div class="fb-comments" data-href="https://luyenthi.onrender.com/index" data-width="100%"
+						data-numposts="5"></div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+	<!-- Footer Start -->
+	<div th:replace="footer.html"></div>
+	<!-- Footer End -->
+
+
+	<!-- Back to Top -->
+	<a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
+
+
+	<!-- JavaScript Libraries -->
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+
+	<!-- Contact Javascript File -->
+	<script src="selectedSubject"></script>
+	<script src="test.js"></script>
+
+
+
+	<!-- Template Javascript -->
+
+
+
+</body>
+
+</html>
